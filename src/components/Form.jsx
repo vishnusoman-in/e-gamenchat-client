@@ -33,7 +33,7 @@ const Form = () => {
   const [password, setpassword] = useState("");
   const [File, setFile] = useState(null);
   const [filename, setfilename] = useState("");
-
+  const [loading, setloading] = useState(false);
   
   
 
@@ -72,21 +72,24 @@ const Form = () => {
     setfilename("")
 
     if (uploaderResponse.status == 200) {
-    
+      setloading(false)
     alert("registered sucessfully")
+
       setPageType("login");
     }
     if (uploaderResponse.status == 409) {
-      
+      setloading(false)
+      alert(`server error`)
      // console.log("error getting response from product upload")
     }
     if (uploaderResponse.status == 400) {
-      
+      setloading(false)
       alert(`Register Failed-${data.msg}`)
     }
 
   }
   else{
+    setloading(false)
     alert("All fields are required to register")
   }
 
@@ -116,26 +119,30 @@ const Form = () => {
     setpassword("")
 
     if (loggedInResponse.status == 200 ) {
+          setloading(false)
            const usery = loggedIn.user;
            const tokey = loggedIn.token;
            updateuser(usery);
            updatetoken(tokey);
-      
+            
          //  console.log(userbio);
          //  console.log(token);
            navigate("/playarena");
        
     }
     if (loggedInResponse.status == 400){
+        setloading(false)
         alert("login failed: invalid email/password")
     }
     if (loggedInResponse.status == 500){
+        setloading(false)
         alert("server error, please try again later")
     }
    
 
   }
   else{
+    setloading(false)
     alert("All fields are required to login")
   }
 
@@ -145,6 +152,7 @@ const Form = () => {
 
   const handleSubmit = async (e) =>  // if they submit form call back for getting login and register actions
   {
+    setloading(true)
     //console.log("handle called")
      e.preventDefault()
     if (isLogin) await login(); // calling login
@@ -249,7 +257,7 @@ const Form = () => {
           </Box>
 
           {/* BUTTONS */}
-          <Box alignItems="center" marginLeft={isLogin ? "10rem" :"0rem"}>
+          <Box display="flex" alignItems="center" marginLeft={isLogin ? "10rem" :"0rem"}>
             <Button
               alignItems="center"
               type="submit"
@@ -264,6 +272,18 @@ const Form = () => {
 
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
+
+            <Box>
+              {loading && <Box display="flex"  marginLeft="1rem">
+                <img src="https://res.cloudinary.com/dexpbdlyc/image/upload/v1672982490/gamerimg/dual_mb7uvj.gif"
+                 width="10%"
+                 height="50%"
+                />
+                <Typography marginTop="0.5rem" marginLeft="2rem" color="white">Server initial loading...</Typography>
+                </Box>
+              }
+            </Box>
+           
           </Box>
 
         </form>
@@ -271,6 +291,9 @@ const Form = () => {
         <Box sx={{cursor:"pointer", color:"white"}} onClick={() => { {isLogin ? setPageType("register") : setPageType("login") }; setname(""); setemail(""); setpassword(""); setFile(null); setfilename(""); } }>
            {isLogin ? "Don't have account, register here" : "Already have account, login here"}
        </Box>
+
+       
+
        </>
        )}
 
@@ -364,7 +387,7 @@ const Form = () => {
          </Box>
 
          {/* BUTTONS */}
-         <Box alignItems="center" >
+         <Box display="flex" alignItems="center" >
            <Button
              alignItems="center"
              type="submit"
@@ -379,6 +402,18 @@ const Form = () => {
 
              {isLogin ? "LOGIN" : "REGISTER"}
            </Button>
+
+           <Box>
+              {loading && <Box display="flex"  marginLeft="1rem">
+                <img src="https://res.cloudinary.com/dexpbdlyc/image/upload/v1672982490/gamerimg/bean_u06qrn.gif"
+                 width="20%"
+                 height="50%"
+                />
+                <Typography marginTop="1rem" marginLeft="2rem" color="white">Server initial loading...</Typography>
+                </Box>
+              }
+            </Box>
+
          </Box>
 
        </form>
